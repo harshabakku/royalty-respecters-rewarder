@@ -5,67 +5,74 @@
  */
  require('log-timestamp');
  const axios = require('axios'); 
+ const fetch = require('node-fetch');
+
 
  let offset = 0;
  let activitiesHistory = [];
 
  // ====== Get Data From Full Collection API 
  
- fetchActivities = async (collectionName) => {
-        
-    const collectionURL = "https://api-mainnet.magiceden.dev/v2/collections/"+ collectionName + "/activities?offset="+ offset + "&limit=1000"
-    console.log('Fetching Data now....'+ collectionURL)
+ fetchActivities = async (collectionSymbol) => {
+
+     
+     
+     const onChainCollection = "4mKSoDDqApmF1DqXvVTSL6tu2zixrSSNjqMxUnwvVzy2"
+     
+    //note:  below API is not available is the documentation(https://api.magiceden.dev/), 
+        //frontend collection pages of magicEden are observed to identify the URL
+        // provides the royalty amounts(creator_fees_amount) for every sale transaction which is of prime importance for this tool
+        // also note that /collections/:symbol/activities has offset limits and does not give creator_fees_amount 
+
+
+    // all sales txTypes are included here : ["exchange","acceptBid","auctionSettled"]
+    const dataURL = "https://api-mainnet.magiceden.io/rpc/getGlobalActivitiesByQueryWithAttributes?excludeSources=%5B%22yawww%22%2C%22solanart%22%2C%22tensortrade%22%2C%22hadeswap%22%2C%22coralcube_v2%22%2C%22elixir_buy%22%2C%22elixir_sell%22%2C%22hyperspace%22%5D&txTypes=%5B%22exchange%22%2C%22acceptBid%22%2C%22auctionSettled%22%5D&filterCollectionSymbol="+collectionSymbol+"&filterOnChainCollection="+ onChainCollection +"&mintAttributes=%5B%5D&offset="+ offset + "&limit=50"
+
+    console.log('Fetching Data now....'+ dataURL)
     
     try{
-        const result = await axios.get(`${collectionURL}`,{
-            headers: {
-                "Content-Type": "application/json"
-            }                                
-        });
-        const activities = result.data;
-        console.log(activities.length);
+        // const result = await axios.get(`${dataURL}`,{
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1'
+        //     }                                
+        // });
 
-        const activityTypes = []
-        activities.map(async activity => (            
-            !activityTypes.includes(activity.type) && activityTypes.push(activity.type)                             
-        ));
-        console.log(activityTypes);
+       const response = await fetch("https://api-mainnet.magiceden.io/rpc/getGlobalActivitiesByQueryWithAttributes?excludeSources=%5B%22yawww%22%2C%22solanart%22%2C%22tensortrade%22%2C%22hadeswap%22%2C%22coralcube_v2%22%2C%22elixir_buy%22%2C%22elixir_sell%22%2C%22hyperspace%22%5D&txTypes=%5B%22exchange%22%2C%22acceptBid%22%2C%22auctionSettled%22%5D&filterCollectionSymbol=y00ts&filterOnChainCollection=4mKSoDDqApmF1DqXvVTSL6tu2zixrSSNjqMxUnwvVzy2&mintAttributes=%5B%5D&offset=0&limit=50", {
+        "headers": {
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+          "accept-language": "en,en-US;q=0.9",
+          "cache-control": "max-age=0",
+          "if-none-match": "W/\"520b7-iPePkvm98V4KRtbaxT25N9ClNEQ\"",
+          "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"96\", \"Google Chrome\";v=\"96\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"Linux\"",
+          "sec-fetch-dest": "document",
+          "sec-fetch-mode": "navigate",
+          "sec-fetch-site": "none",
+          "sec-fetch-user": "?1",
+          "upgrade-insecure-requests": "1"
+        },
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": null,
+        "method": "GET",
+        "mode": "cors",
+        "credentials": "include"
+      });
+
+console.log (response);
+        // // const activities = result.data;
+        // // console.log(activities.length);
         
-        return activities;    
-    }catch{
+        // return activities;    
+    }catch(e){
+        console.log(e)
         return 
     }    
 }
 
-//filters activity and returns a Map with tokenMint as key and all of its activities as value  
-filterMapWithTokenMint = async (activitiesHistory, activityType) => {
 
-    const filteredResult = activitiesHistory.filter(function (activity) {     
-        return activity.type == activityType
-    });    
-    
-    const tokenMintActivities = filteredResult.reduce(function(map, activity) {
-        
-        !map[activity.tokenMint] && ( map[activity.tokenMint] = [] )
-        map[activity.tokenMint].push(activity) ;
 
-        return map;
-    }, {});
-
-    return tokenMintActivities;
-}
-
-fetchCreatorRoyalty = async (tokenMint) => {
-
-    const tokenURL = "https://api-mainnet.magiceden.dev/v2/tokens/"+ tokenMint; 
-    const result = await axios.get(`${tokenURL}`,{
-        headers: {
-            "Content-Type": "application/json"
-        }                                
-    });
-    // console.log(result.data)
-    return result.data.sellerFeeBasisPoints;
-}
 
 fetchCollectionActivitiesHistory = async () => {
 
@@ -74,53 +81,13 @@ fetchCollectionActivitiesHistory = async () => {
     while (activities && activities.length >= 0 ) {
         activitiesHistory = activitiesHistory.concat(activities);
         // increase offset and fetch again
-        offset = offset + 1000;
+        offset = offset + 50;
         console.log("fetching data again using offset "+ offset)
+        console.log("total activities fetched "+ activitiesHistory.length);
         activities = await fetchActivities(collectionName);
     }
 
-    console.log("total activities fetched "+ activitiesHistory.length);
 
-    //creatorRoyalty is same for the all tokens in entire collection. using the latest activity tokenMint here
-    const creatorRoyalty = await fetchCreatorRoyalty(activitiesHistory[0].tokenMint)
-
-    console.log(" creatorRoyalty for collection " + collectionName + " :  "+   creatorRoyalty/100 )
-    
-    const buys = activitiesHistory.filter(function (activity) {     
-        return activity.type == 'buyNow'
-    });
-    console.log("no. of buyNow activities "+ buys.length);
-    //returns a Map with tokenMint as key and all of its listings activities array as value  
-    const listings = await filterMapWithTokenMint(activitiesHistory,"list");
-     
-
-    //returns buys with the listing matching the seller. every buyNow mapped with its listing
-    buysWithListings = buys.map((buy) => {
-
-        if(listings[buy.tokenMint]){
-            for (let i=0; i < listings[buy.tokenMint].length; i++) {
-                const listing = listings[buy.tokenMint][i];
-                //buy.price > listing.price is used to identify bids accepted
-                if (buy.seller == listing.seller && buy.blockTime > listing.blockTime && buy.price >= listing.price) {                
-                    if(buy.listing){
-                        //multiple listings exist for the buy, update with the most recent one.                      
-                        if(listing.blockTime > buy.listing.blockTime) {                             
-                            console.log( "earlier one")
-                            console.log(buy.listing);
-                            buy.listing = listing 
-                            console.log( "new one")
-                            console.log(buy.listing);
-                        }  
-                    }else{
-                        buy.listing = listing;
-                    }
-                } 
-            }
-        }    
-        return buy;
-    });
-
-    console.log(buysWithListings);
                
 
 }    

@@ -13,6 +13,7 @@
     "axios": "^0.19.0",
     "get-json": "^1.0.1",
     "log-timestamp": "^0.3.0",
+    "node-fetch": "2.6.1",
     "nodemon": "^1.19.2"
   }
 }
