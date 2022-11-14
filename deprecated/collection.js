@@ -71,7 +71,7 @@ fetchCreatorRoyalty = async (tokenMint) => {
     return result.data.sellerFeeBasisPoints;
 }
 
-fetchCollectionActivitiesHistory = async () => {
+fetchRoyaltyRespecters = async () => {
 
     const collectionName = 'y00ts';
     let activities = await fetchActivities(collectionName);
@@ -132,5 +132,5 @@ fetchCollectionActivitiesHistory = async () => {
    
  
 module.exports = {
-   fetchCollectionActivitiesHistory
+   fetchRoyaltyRespecters
 }
