@@ -1,7 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import { Component } from "react";
-import ReactTable from "react-table-6";
+// import {  Col, Row } from "reactstrap";
+import { Container, Row, Col } from 'react-bootstrap';
+
 import axios from "axios";
 
 
@@ -18,10 +20,12 @@ const getRoyaltyRespecters = async (collectionSymbol) => {
   }
 };
 
+
 class App extends Component {
 
   constructor(props) {
     super(props);
+    
     this.state = {
       respectersData : [],
       isLoading: true,
@@ -39,12 +43,26 @@ componentDidMount = async () => {
   console.log("fetching royalty respecters for collection  .."+ collectionSymbol);
   const respectersData  = await getRoyaltyRespecters(collectionSymbol);
 
-  this.setState({
+  await this.setState({
     isLoading: false,
     respectersData: respectersData    
   });
 
+  await this.computeRaffleWinner(respectersData);
+
 };
+
+computeRaffleWinner = async (royaltyRespecters) => {
+
+  console.log(royaltyRespecters.length)
+  const randIndex = Math.floor(Math.random() * royaltyRespecters.length)
+
+  console.log(randIndex)
+  console.log(royaltyRespecters[randIndex]);
+  console.log("raffle winner "+ royaltyRespecters[randIndex].buyer_address);
+
+}
+
 
 render() {
 
@@ -52,49 +70,30 @@ render() {
 
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Testing : Learn React
-        </a>
-      </header>
+    <div>
+      {/* <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />   
+      </header> */}
 
-      <ReactTable
-            data={respectersData}
-            columns={[
-                {
-                    Header: "Buyer",
-                    accessor: "buyer_address",
-                },
-                {
-                    Header: "Seller",
-                    accessor: "seller_address",
-                },
-            ]}
-            loading={isLoading}
-            loadingText={"Fetching Royalty Respecters for collection..."}
-            minRows={
-                respectersData?.length
-            }
-            manual={true}
-            manualPagination={true}
-            page={pageNumber}
-            pages={pageSize}
-            pageSize={rowPerPage}
-            defaultPageSize={rowPerPage}
-            pageSizeOptions={[100, 500, 1000]}
-            onPageChange={this.onPageChange}
-            onPageSizeChange={this.onRowPerPageChange}
-      />
+      <div className=''>
+      {respectersData?.map((i) => (
+                            <Row className="" style={{ fontSize: 15, fontWeight:500}}>
+                                <Col > {i.buyer_address}</Col>
+
+                                <Col > {i.seller_address}</Col>
+                                   
+                            </Row>
+                        ))}
+
+      </div>
+
+      <Container>
+                <Row>
+                    <Col>1</Col>
+                    <Col>2</Col>
+                    <Col>3</Col>
+                </Row>
+            </Container>
     </div>
   );
 }
