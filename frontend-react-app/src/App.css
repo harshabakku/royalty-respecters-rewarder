@@ -1,5 +1,18 @@
-.App {
-  text-align: center;
+
+
+.raffleButton {
+  width: 30%;
+  height: 60px;
+  border-radius: 16px !important;
+  border-color: #04CA7F !important;
+  font-weight: 500 !important;
+  font-size: 25px;
+  margin-right: 5%;
+  margin-top:10%;
+}
+
+home-text-span {
+  color: #04ca7f;
 }
 
 .App-logo {

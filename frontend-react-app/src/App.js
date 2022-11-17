@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { Component } from "react";
+import { Button } from "reactstrap";
 // import {  Col, Row } from "reactstrap";
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -44,15 +45,17 @@ componentDidMount = async () => {
   const respectersData  = await getRoyaltyRespecters(collectionSymbol);
 
   await this.setState({
+    collectionSymbol : collectionSymbol,
     isLoading: false,
     respectersData: respectersData    
   });
 
-  await this.computeRaffleWinner(respectersData);
 
 };
 
-computeRaffleWinner = async (royaltyRespecters) => {
+computeRaffleWinner = async () => {
+  
+  const royaltyRespecters = this.state.respectersData;
 
   console.log(royaltyRespecters.length)
   const randIndex = Math.floor(Math.random() * royaltyRespecters.length)
@@ -60,6 +63,10 @@ computeRaffleWinner = async (royaltyRespecters) => {
   console.log(randIndex)
   console.log(royaltyRespecters[randIndex]);
   console.log("raffle winner "+ royaltyRespecters[randIndex].buyer_address);
+
+  await this.setState({
+    raffleWinner : royaltyRespecters[randIndex].buyer_address
+  })
 
 }
 
@@ -71,6 +78,39 @@ render() {
 
   return (
     <div>
+
+
+            <Button 
+                outline
+                className="mt-4 raffleButton"
+                color="primary"
+                type="submit"
+                onClick={this.computeRaffleWinner}
+            >            
+                Run Raffle
+            </Button>
+
+      {this.state.raffleWinner && 
+      <div>      
+          <h1 className="text-4xl leading-normal">
+          Raffle Winner amongst Royalty Respecters for Collection <br></br>  {this.state.collectionSymbol}
+          {this.state.raffleWinner} 
+          </h1>
+
+          <Button 
+            outline
+            className="mt-4 raffleButton"
+            color="primary"
+            type="submit"
+            // onClick={this.computeRaffleWinner}
+          >            
+          Send Raffle NFT
+          </Button>
+          </div>
+      
+      }
+
+
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />   
       </header> */}
