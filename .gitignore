@@ -25,3 +25,8 @@ frontend-react-app/.env.test.local
 frontend-react-app/npm-debug.log*
 frontend-react-app/yarn-debug.log*
 frontend-react-app/yarn-error.log*
+
+
+solana-NFT-minter/node_modules
+solana-NFT-minter/package-lock.json
+
