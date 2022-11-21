@@ -7,6 +7,19 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import axios from "axios";
 
+const getProvider = () => {
+  if ('phantom' in window) {
+    const provider = window.phantom?.solana;
+
+    if (provider?.isPhantom) {
+      return provider;
+    }
+  }
+
+  window.open('https://phantom.app/', '_blank');
+};
+
+
 
 const getRoyaltyRespecters = async (collectionSymbol) => {
   try {
@@ -33,13 +46,14 @@ class App extends Component {
       rowPerPage: 100,
       pageNumber: 0,
       pageSize: 0,
+      
     };
   }
 
 
 
 componentDidMount = async () => {
-    
+
   const collectionSymbol = undefined 
   console.log("fetching royalty respecters for collection  .."+ collectionSymbol);
   const respectersData  = await getRoyaltyRespecters(collectionSymbol);
@@ -52,6 +66,24 @@ componentDidMount = async () => {
 
 
 };
+
+ 
+connectWallet =  async() =>{
+ 
+  const provider = getProvider(); // see "Detecting the Provider"
+  try {
+      const resp = await provider.connect();
+      console.log("connectedAddress " + resp.publicKey.toString());
+      await this.setState({
+        connectedAddress : resp.publicKey.toString()
+      });
+      // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo 
+  } catch (err) {
+     console.log(err)  
+    // { code: 4001, message: 'User rejected the request.' }
+  }
+
+}
 
 computeRaffleWinner = async () => {
   
@@ -79,6 +111,15 @@ render() {
   return (
     <div>
 
+            <Button 
+                outline
+                className="mt-4 raffleButton"
+                color="primary"
+                type="submit"
+                onClick={this.connectWallet}
+            >            
+                Connect Wallet
+            </Button>
 
             <Button 
                 outline
