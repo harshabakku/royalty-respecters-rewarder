@@ -68,7 +68,7 @@ componentDidMount = async () => {
 };
 
  
-connectWallet =  async() =>{
+connectPhantomWallet =  async() =>{
  
   const provider = getProvider(); // see "Detecting the Provider"
   try {
@@ -77,13 +77,30 @@ connectWallet =  async() =>{
       await this.setState({
         connectedAddress : resp.publicKey.toString()
       });
-      // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo 
   } catch (err) {
      console.log(err)  
     // { code: 4001, message: 'User rejected the request.' }
   }
 
 }
+
+disconnectPhantomWallet =  async() =>{
+ 
+  const provider = getProvider(); // see "Detecting the Provider"
+  try {
+      provider.disconnect();
+      console.log("disconnecting Wallet " + this.state.connectedAddress);
+      await this.setState({
+        connectedAddress : null
+      });      
+  } catch (err) {
+     console.log(err)  
+  }
+
+}
+
+
+
 
 computeRaffleWinner = async () => {
   
@@ -110,16 +127,34 @@ render() {
 
   return (
     <div>
+             
+             {
 
+             !this.state.connectedAddress? (
             <Button 
                 outline
                 className="mt-4 raffleButton"
                 color="primary"
                 type="submit"
-                onClick={this.connectWallet}
+                onClick={this.connectPhantomWallet}
             >            
                 Connect Wallet
-            </Button>
+            </Button>):(
+             <div>
+                <p>connectedAddress</p>
+                <p>{this.state.connectedAddress}</p>
+                <Button 
+                  outline
+                  className="mt-4 raffleButton"
+                  color="primary"
+                  type="submit"
+                  onClick={this.disconnectPhantomWallet}
+                >            
+                   Disconnect Wallet
+                </Button>
+             </div> 
+            )
+            }
 
             <Button 
                 outline
