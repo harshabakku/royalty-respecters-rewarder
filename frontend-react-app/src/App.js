@@ -100,6 +100,19 @@ disconnectPhantomWallet =  async() =>{
 }
 
 
+sendRaffleNftTransaction =  async() =>{
+ 
+  const provider = getProvider(); // see "Detecting the Provider"
+  const network = "https://api.devnet.solana.com"; //bring into config file
+  const connection = new Connection(network);
+  const transaction = new Transaction();
+  const { signature } = await provider.signAndSendTransaction(transaction);
+  console.log("sendRffleNftTransaction signature: "+ signature)
+  const status = await connection.getSignatureStatus(signature);
+
+  console.log("signature status" + status)
+
+}
 
 
 computeRaffleWinner = async () => {

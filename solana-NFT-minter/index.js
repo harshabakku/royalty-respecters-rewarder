@@ -39,8 +39,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var web3_js_1 = require("@solana/web3.js");
 var spl_token_1 = require("@solana/spl-token");
+//recieves NFT
+var toWalletPublicKeyString = "YXAe6cRwn3UczVNpFWgr5vadupVcqT9Nq8qzvmmaMiX";
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var connection, fromWallet, fromAirdropSignature, mint, fromTokenAccount, toWallet, toTokenAccount, signature;
+    var connection, fromWallet, fromAirdropSignature, mint, fromTokenAccount, toWalletPublicKey, toTokenAccount, signature;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -59,8 +61,10 @@ var spl_token_1 = require("@solana/spl-token");
                 return [4 /*yield*/, (0, spl_token_1.getOrCreateAssociatedTokenAccount)(connection, fromWallet, mint, fromWallet.publicKey)];
             case 3:
                 fromTokenAccount = _a.sent();
-                toWallet = web3_js_1.Keypair.generate();
-                return [4 /*yield*/, (0, spl_token_1.getOrCreateAssociatedTokenAccount)(connection, fromWallet, mint, toWallet.publicKey)];
+                toWalletPublicKey = new web3_js_1.PublicKey(toWalletPublicKeyString);
+                return [4 /*yield*/, (0, spl_token_1.getOrCreateAssociatedTokenAccount)(connection, fromWallet, mint, toWalletPublicKey
+                    // toWallet.publicKey
+                    )];
             case 4:
                 toTokenAccount = _a.sent();
                 return [4 /*yield*/, (0, spl_token_1.mintTo)(connection, fromWallet, // Payer of the transaction fees 

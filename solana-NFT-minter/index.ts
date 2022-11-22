@@ -1,7 +1,10 @@
 //https://www.quicknode.com/guides/solana-development/how-to-mint-an-nft-on-solana
 
-import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL } from  "@solana/web3.js";
+import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from  "@solana/web3.js";
 import { createMint, getOrCreateAssociatedTokenAccount, mintTo, setAuthority, transfer } from  "@solana/spl-token";
+
+//recieves NFT
+const toWalletPublicKeyString = "YXAe6cRwn3UczVNpFWgr5vadupVcqT9Nq8qzvmmaMiX";
 
 (async () => {
   // Connect to cluster
@@ -35,14 +38,17 @@ import { createMint, getOrCreateAssociatedTokenAccount, mintTo, setAuthority, tr
   );
 
   // Generate a new wallet to receive the newly minted token
-  const toWallet = Keypair.generate();
-
+  // const toWallet = Keypair.generate();
+ 
+  const toWalletPublicKey = new PublicKey(toWalletPublicKeyString);
   // Get the token account of the toWallet Solana address. If it does not exist, create it.
   const toTokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,
     fromWallet,
     mint,
-    toWallet.publicKey
+    toWalletPublicKey
+    // toWallet.publicKey
+
   );
 
   // Minting 1 new token to the "fromTokenAccount" account we just returned/created.
