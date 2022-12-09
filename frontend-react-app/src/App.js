@@ -8,6 +8,9 @@ import { Container, Row, Col } from 'react-bootstrap';
 import axios from "axios";
 import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from  "@solana/web3.js";
 import { createMint, getOrCreateAssociatedTokenAccount, mintTo, setAuthority, transfer } from  "@solana/spl-token";
+import alerts from "./sweetalerts";
+
+
 import * as buffer from "buffer";
 window.Buffer = buffer.Buffer;
 
@@ -75,7 +78,7 @@ componentDidMount = async () => {
 
 };
 
- 
+//unused 
 connectPhantomWallet =  async() =>{
  
   const provider = getProvider(); // see "Detecting the Provider"
@@ -91,7 +94,7 @@ connectPhantomWallet =  async() =>{
   }
 
 }
-
+//unused
 disconnectPhantomWallet =  async() =>{
  
   const provider = getProvider(); // see "Detecting the Provider"
@@ -109,6 +112,7 @@ disconnectPhantomWallet =  async() =>{
 
 
 sendRaffleNftTransaction =  async() =>{
+
  
   // Connect to cluster
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
@@ -186,6 +190,9 @@ sendRaffleNftTransaction =  async() =>{
 
   console.log("Transfer SIGNATURE", signature);
 
+  alerts.confirmedTxAlert({ txSignature : signature, succesMsg : "NFT sent to Raffle Winner"})
+
+
 }
 
 
@@ -203,9 +210,6 @@ computeRaffleWinner = async () => {
   await this.setState({
     raffleWinner : royaltyRespecters[randIndex].buyer_address
   })
-  
-  await this.sendRaffleNftTransaction()
-
 }
 
 
@@ -219,30 +223,30 @@ render() {
              
              {
 
-             !this.state.connectedAddress? (
-            <Button 
-                outline
-                className="mt-4 raffleButton"
-                color="primary"
-                type="submit"
-                onClick={this.connectPhantomWallet}
-            >            
-                Connect Wallet
-            </Button>):(
-             <div>
-                <p>connectedAddress</p>
-                <p>{this.state.connectedAddress}</p>
-                <Button 
-                  outline
-                  className="mt-4 raffleButton"
-                  color="primary"
-                  type="submit"
-                  onClick={this.disconnectPhantomWallet}
-                >            
-                   Disconnect Wallet
-                </Button>
-             </div> 
-            )
+            //  !this.state.connectedAddress? (
+            // <Button 
+            //     outline
+            //     className="mt-4 raffleButton"
+            //     color="primary"
+            //     type="submit"
+            //     onClick={this.connectPhantomWallet}
+            // >            
+            //     Connect Wallet
+            // </Button>):(
+            //  <div>
+            //     <p>connectedAddress</p>
+            //     <p>{this.state.connectedAddress}</p>
+            //     <Button 
+            //       outline
+            //       className="mt-4 raffleButton"
+            //       color="primary"
+            //       type="submit"
+            //       onClick={this.disconnectPhantomWallet}
+            //     >            
+            //        Disconnect Wallet
+            //     </Button>
+            //  </div> 
+            // )
             }
 
             <Button 
@@ -267,7 +271,7 @@ render() {
             className="mt-4 raffleButton"
             color="primary"
             type="submit"
-            // onClick={this.computeRaffleWinner}
+            onClick={this.sendRaffleNftTransaction}
           >            
           Send Raffle NFT
           </Button>
