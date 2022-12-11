@@ -20,12 +20,12 @@ const alerts = {
     },
     confirmedTxAlert: ({ txSignature,succesMsg }) => {
         const structure = {
-            title: "Success!",
+            title: "",
             text: succesMsg,
             icon: "success",
             buttons: {
                 tezos: {
-                    text: "view on SolanaFM",
+                    text: "view Tx on SolanaFM",
                     value: "solana",
                     closeModal: false,
                 }

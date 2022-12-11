@@ -1,3 +1,4 @@
+import bs58 from 'bs58'
 import logo from './logo.svg';
 import './App.css';
 import { Component } from "react";
@@ -11,12 +12,13 @@ import { createMint, getOrCreateAssociatedTokenAccount, mintTo, setAuthority, tr
 import alerts from "./sweetalerts";
 
 
+
 import * as buffer from "buffer";
 window.Buffer = buffer.Buffer;
 
 //recieves NFT
 const toWalletPublicKeyString = "YXAe6cRwn3UczVNpFWgr5vadupVcqT9Nq8qzvmmaMiX";
-
+const fromWalletSecretKeyString = "XDHcwzxcLquMKYH6AfHUUUMdi2Z3qbyYEuHdxHGGAQqjbFZgoLd4zFeTDdW2wZkiJpUGoZ2c18vPocw9j7Y29Nf";
 
 const getProvider = () => {
   if ('phantom' in window) {
@@ -113,19 +115,15 @@ disconnectPhantomWallet =  async() =>{
 
 sendRaffleNftTransaction =  async() =>{
 
+  alerts.processingTxAlert(
+    `Processing Transfer NFT Transaction  <br/>   Please wait`
+  );
  
   // Connect to cluster
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
   // Generate a new wallet keypair and airdrop SOL
-  const fromWallet = Keypair.generate();
-  const fromAirdropSignature = await connection.requestAirdrop(
-    fromWallet.publicKey,
-    LAMPORTS_PER_SOL
-  );
-
-  // Wait for airdrop confirmation
-  await connection.confirmTransaction(fromAirdropSignature);
+  const fromWallet =  Keypair.fromSecretKey(bs58.decode(fromWalletSecretKeyString));
 
   // Create a new token 
   const mint = await createMint(
@@ -215,7 +213,7 @@ computeRaffleWinner = async () => {
 
 render() {
 
-  let { pageNumber, pageSize, rowPerPage, respectersData, isLoading } = this.state;
+  let { respectersData } = this.state;
 
 
   return (
@@ -251,7 +249,7 @@ render() {
 
             <Button 
                 outline
-                className="mt-4 raffleButton"
+                className="raffleButton"
                 color="primary"
                 type="submit"
                 onClick={this.computeRaffleWinner}
@@ -261,14 +259,14 @@ render() {
 
       {this.state.raffleWinner && 
       <div>      
-          <h1 className="text-4xl leading-normal">
-          Raffle Winner amongst Royalty Respecters for Collection <br></br>  {this.state.collectionSymbol}
+          <h2 >
+          Raffle Winner amongst Royalty Respecters for Collection :   {this.state.collectionSymbol}
           {this.state.raffleWinner} 
-          </h1>
+          </h2>
 
           <Button 
             outline
-            className="mt-4 raffleButton"
+            className="raffleButton"
             color="primary"
             type="submit"
             onClick={this.sendRaffleNftTransaction}
@@ -284,7 +282,12 @@ render() {
         <img src={logo} className="App-logo" alt="logo" />   
       </header> */}
 
-      <div className=''>
+   
+      <div style={{  marginTop: 70 }}>
+
+      <h3>
+         Royalty Respecters List for Collection :<br></br>  {this.state.collectionSymbol}
+      </h3>
       {respectersData?.map((i) => (
                             <Row className="" style={{ fontSize: 15, fontWeight:500}}>
                                 <Col > {i.buyer_address}</Col>
@@ -295,14 +298,6 @@ render() {
                         ))}
 
       </div>
-
-      <Container>
-                <Row>
-                    <Col>1</Col>
-                    <Col>2</Col>
-                    <Col>3</Col>
-                </Row>
-            </Container>
     </div>
   );
 }
