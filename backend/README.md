@@ -1,1 +1,0 @@
-### royalty-respecters-rewarder
