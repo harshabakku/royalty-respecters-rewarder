@@ -2,6 +2,8 @@ const express = require('express');
 const formData = require('express-form-data');  
 const service =  require('./routes/api/service');
 let cors = require("cors");
+const config = require('./config');
+
 
 
 
@@ -22,9 +24,7 @@ app.use(formData.parse())
 //Define Routes
 app.use('/api/service', service);
 
-// const PORT = config.expressServerPort || 5000;
-
-const PORT = 5000;
+const PORT = config.expressServerPort || 5000;
 
 app.listen(PORT, () => console.group(`Express Server Started On ${PORT}`));
 

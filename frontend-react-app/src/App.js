@@ -67,7 +67,7 @@ class App extends Component {
 
 componentDidMount = async () => {
 
-  const collectionSymbol = undefined 
+  const collectionSymbol = "meowths" 
   console.log("fetching royalty respecters for collection  .."+ collectionSymbol);
   const respectersData  = await getRoyaltyRespecters(collectionSymbol);
 
@@ -260,7 +260,7 @@ render() {
       {this.state.raffleWinner && 
       <div>      
           <h2 >
-          Raffle Winner amongst Royalty Respecters for Collection :   {this.state.collectionSymbol}
+          Raffle Winner amongst Royalty Respecters for Collection {this.state.collectionSymbol} :   
           {this.state.raffleWinner} 
           </h2>
 
@@ -286,7 +286,7 @@ render() {
       <div style={{  marginTop: 70 }}>
 
       <h3>
-         Royalty Respecters List for Collection :<br></br>  {this.state.collectionSymbol}
+         Royalty Respecters List for collection symbol :  {this.state.collectionSymbol}
       </h3>
       {respectersData?.map((i) => (
                             <Row className="" style={{ fontSize: 15, fontWeight:500}}>

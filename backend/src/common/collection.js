@@ -6,6 +6,8 @@
  require('log-timestamp');
  const axios = require('axios'); 
  const fetch = require('node-fetch');
+ const config = require('./../../config');
+
 
 
  let offset = 0;
@@ -22,7 +24,7 @@
 
 
     // all sales txTypes are included below : ["exchange","acceptBid","auctionSettled"]
-    let dataURL = "https://api-devnet.magiceden.io/rpc/getGlobalActivitiesByQueryWithAttributes?excludeSources=%5B%22yawww%22%2C%22solanart%22%2C%22tensortrade%22%2C%22hadeswap%22%2C%22coralcube_v2%22%2C%22elixir_buy%22%2C%22elixir_sell%22%2C%22hyperspace%22%5D"
+    let dataURL = config.dataURLPrefix +"rpc/getGlobalActivitiesByQueryWithAttributes?excludeSources=%5B%22yawww%22%2C%22solanart%22%2C%22tensortrade%22%2C%22hadeswap%22%2C%22coralcube_v2%22%2C%22elixir_buy%22%2C%22elixir_sell%22%2C%22hyperspace%22%5D"
     +"&txTypes=%5B%22exchange%22%2C%22acceptBid%22%2C%22auctionSettled%22%5D&mintAttributes=%5B%5D" 
 
     // +"&filterOnChainCollection="+ onChainCollection  // use this for even more explict filtering for a collection on mainnet

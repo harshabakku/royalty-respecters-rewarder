@@ -11,7 +11,9 @@ const { fetchRoyaltyRespecters } = require('../../src/common/collection');
 
 router.get('/royaltyRespecters', async function (req, res) {
         
-    const royaltyrRespecters = await fetchRoyaltyRespecters('meowths')
+    const collectionSymbol = req.query.collectionSymbol;
+
+    const royaltyrRespecters = await fetchRoyaltyRespecters(collectionSymbol)
     res.json(royaltyrRespecters);
 
 });
