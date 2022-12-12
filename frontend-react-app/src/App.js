@@ -10,6 +10,7 @@ import axios from "axios";
 import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from  "@solana/web3.js";
 import { createMint, getOrCreateAssociatedTokenAccount, mintTo, setAuthority, transfer } from  "@solana/spl-token";
 import alerts from "./sweetalerts";
+import config from './config';
 
 
 
@@ -29,7 +30,7 @@ const getProvider = () => {
     }
   }
 
-  window.open('https://phantom.app/', '_blank');
+  window.open(config.phantomWebURL, '_blank');
 };
 
 
@@ -37,7 +38,7 @@ const getProvider = () => {
 const getRoyaltyRespecters = async (collectionSymbol) => {
   try {
       const response = await axios.get(
-          `http://localhost:5000/api/service/royaltyRespecters?${collectionSymbol?"collectionSymbol="+collectionSymbol:""}`,
+           config.backendRoyaltyRespectersDataURL + `?${collectionSymbol?"collectionSymbol="+collectionSymbol:""}`,
       );
       
        console.log(response.data)
@@ -67,7 +68,7 @@ class App extends Component {
 
 componentDidMount = async () => {
 
-  const collectionSymbol = "meowths" 
+  const collectionSymbol =  config.raffleCollectionSymbol;
   console.log("fetching royalty respecters for collection  .."+ collectionSymbol);
   const respectersData  = await getRoyaltyRespecters(collectionSymbol);
 
@@ -260,7 +261,7 @@ render() {
       {this.state.raffleWinner && 
       <div>      
           <h2 >
-          Raffle Winner amongst Royalty Respecters for Collection {this.state.collectionSymbol} :   
+          Raffle Winner amongst Royalty Respecters for collection {this.state.collectionSymbol} :   <br></br> 
           {this.state.raffleWinner} 
           </h2>
 
