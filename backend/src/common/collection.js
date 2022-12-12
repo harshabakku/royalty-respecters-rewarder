@@ -10,13 +10,13 @@
 
 
 
- let offset = 0;
  const limit = 500
-
+ 
  // ====== Get Data From Full Collection API 
  
  fetchActivities = async (collectionSymbol) => {
-
+     
+     let offset = 0;
     //note:  below API is not available is the documentation(https://api.magiceden.dev/), 
         //frontend collection pages of magicEden are observed to identify the URL
         // provides the royalty amounts(creator_fees_amount) for every sale transaction which is of prime importance for this tool

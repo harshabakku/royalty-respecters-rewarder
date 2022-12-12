@@ -60,7 +60,7 @@ Example Backend API with respecters data :
 >http://localhost:5000/api/service/royaltyRespecters?collectionSymbol=kikiverse
 >http://localhost:5000/api/service/royaltyRespecters?collectionSymbol=solgods
 
-Example Datassource API from which sales data is fetched and royalty respecters data computed in the backend:
+Example Datassource API from which sales data is fetched and royalty respecters data computed in the backend: (there is repetitive data on devnet)
 >https://api-devnet.magiceden.io/rpc/getGlobalActivitiesByQueryWithAttributes?excludeSources=%5B%22yawww%22%2C%22solanart%22%2C%22tensortrade%22%2C%22hadeswap%22%2C%22coralcube_v2%22%2C%22elixir_buy%22%2C%22elixir_sell%22%2C%22hyperspace%22%5D&txTypes=%5B%22exchange%22%2C%22acceptBid%22%2C%22auctionSettled%22%5D&mintAttributes=%5B%5D&filterCollectionSymbol=meowths&offset=0&limit=500
 
 To change the datasource API to mainnet, please set 'dataURLPrefix' as  'https://api-mainnet.magiceden.io/' in [backend/config.js](backend/config.js). 
@@ -77,7 +77,7 @@ Please note that API calls from backend like below are sometimes being blocked b
 
 #### live setup on AWS server  
 
-All the development and testing was locally done on a **16gb RAM** machine. I recommend atleast **8GB RAM** machine for the setup. 
+All the development and testing was locally done on a **16GB RAM** machine. I recommend atleast **8GB RAM** machine for the setup. 
 
 Feel free to connect with me for any queries
 
