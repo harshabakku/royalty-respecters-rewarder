@@ -68,9 +68,15 @@ To change the datasource API to mainnet, please set 'dataURLPrefix' as  'https:/
 To view royalty respecters for different collection and to run the raffle  please update 'raffleCollectionSymbol' in [frontend-react-app/src/config.js](frontend-react-app/src/config.js). 
 
 
-Please note that API calls from backend like below are sometimes being blocked by magicEden cloudflare and that is I had been using devnet for testing and development.
+Please note that API calls from backend like below are sometimes being blocked by magicEden cloudflare and that is why I had been using devnet for testing and development.
 > https://api-mainnet.magiceden.io/rpc/getGlobalActivitiesByQueryWithAttributes?excludeSources=%5B%22yawww%22%2C%22solanart%22%2C%22tensortrade%22%2C%22hadeswap%22%2C%22coralcube_v2%22%2C%22elixir_buy%22%2C%22elixir_sell%22%2C%22hyperspace%22%5D&txTypes=%5B%22exchange%22%2C%22acceptBid%22%2C%22auctionSettled%22%5D&filterCollectionSymbol=y00ts&filterOnChainCollection=4mKSoDDqApmF1DqXvVTSL6tu2zixrSSNjqMxUnwvVzy2&mintAttributes=%5B%5D&offset=0&limit=50
 
+
+----------------------------------------------------------
+
+#### Demo Video 
+
+> https://www.youtube.com/watch?v=uCZTvtm1200
 
 
 ------------------------------------------------------------
